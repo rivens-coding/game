@@ -29,6 +29,9 @@ public:
     const char* imagePath_1024 = "1024.png";
     const char* imagePath_2048 = "2048.png";
     const char* gameOverImagePath = "balloons.png";
+    const char* startPath = "start.png";
+    const char* helpPath = "help.png";
+    const char* exitPath = "exit.png";
 
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -51,11 +54,17 @@ public:
     SDL_Texture* image_1024;
     SDL_Texture* image_2048;
     SDL_Texture* gameOverTxt;
+    SDL_Texture* StartButton;
+    SDL_Texture* HelpButton;
+    SDL_Texture* ExitButton;
 
     Board x;
 
     SDL_Rect rect;
     SDL_Rect rectb;
+    SDL_Rect rectStart;
+    SDL_Rect rectHelp;
+    SDL_Rect rectExit;
 
     Game(int _w1,int _x,int _y,int _w2 )
     {
@@ -65,6 +74,21 @@ public:
         rectb.y = _y;
         rectb.w = _w2;
         rectb.h = _w2;
+
+        rectStart.x=400;
+        rectStart.y=240;
+        rectStart.w=200;
+        rectStart.h=50;
+
+        rectHelp.x=400;
+        rectHelp.y=300;
+        rectHelp.w=200;
+        rectHelp.h=50;
+
+        rectExit.x=400;
+        rectExit.y=360;
+        rectExit.w=200;
+        rectExit.h=50;
     };
 
     void init();

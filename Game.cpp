@@ -32,6 +32,9 @@ void Game::init() {
     image_1024 = loadTexture(imagePath_1024, renderer);
     image_2048 = loadTexture(imagePath_2048, renderer);
     gameOverTxt = loadTexture(gameOverImagePath, renderer);
+    StartButton = loadTexture(startPath, renderer);
+    HelpButton = loadTexture(helpPath, renderer);
+    ExitButton = loadTexture(exitPath ,renderer);
 
     for (int i=1;i<=2;i++)
     {
@@ -102,6 +105,9 @@ void Game::destroy()
     SDL_DestroyTexture( image_1024 );
     SDL_DestroyTexture( image_2048 );
     SDL_DestroyTexture( gameOverTxt );
+    SDL_DestroyTexture( StartButton );
+    SDL_DestroyTexture( HelpButton );
+    SDL_DestroyTexture( ExitButton );
 
     Mix_FreeChunk(win);
     Mix_FreeChunk(lose);
@@ -159,3 +165,14 @@ bool Game::initmusic()
     }
     return success;
 }
+
+void Game::menu()
+{
+    clearScreen();
+    SDL_RenderCopy( renderer, backgroundTxt, NULL, NULL);
+    SDL_RenderCopy( renderer, StartButton, NULL, &rectStart);
+    SDL_RenderCopy( renderer, HelpButton, NULL, &rectHelp);
+    SDL_RenderCopy( renderer, ExitButton, NULL, &rectExit);
+    SDL_RenderPresent( renderer );
+}
+
