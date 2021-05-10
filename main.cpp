@@ -23,37 +23,9 @@ int main(int argc, char *argv[])
         {
             if( e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP )
             {
-                //Get mouse position
-                int x, y;
-                SDL_GetMouseState( &x, &y );
-
-                //Check if mouse is in button
-                bool inside = true;
-
-                //Mouse is left of the button
-                if( x < 400 )
+                if( !game.insideStartButton() )
                 {
-                    inside = false;
-                }
-                //Mouse is right of the button
-                else if( x > 600 )
-                {
-                    inside = false;
-                }
-                //Mouse above the button
-                else if( y < 250 )
-                {
-                    inside = false;
-                }
-                //Mouse below the button
-                else if( y > 290 )
-                {
-                    inside = false;
-                }
-
-                if( !inside )
-                {
-                    continue;
+                    //continue;
                 }
                 //Mouse is inside button
                 else
@@ -125,6 +97,81 @@ int main(int argc, char *argv[])
                         break;
                     }
                 }
+
+                if( !game.insideHelpButton() )
+                {
+                    //continue;
+                }
+                else
+                {
+                    switch (e.type)
+                    {
+                        case SDL_MOUSEMOTION:
+                            break;
+
+                        case SDL_MOUSEBUTTONDOWN:
+                        {
+                            Mix_PlayChannel(-1,game.merger,0);
+                            SDL_RenderCopy( game.renderer, game.backgroundTxt, NULL, NULL);
+                            SDL_RenderCopy( game.renderer, game.huongdanTxt, NULL, NULL);
+                            SDL_RenderCopy( game.renderer, game.backTxt, NULL, &game.rectBack);
+                            SDL_RenderPresent(game.renderer);
+                            bool flag = true;
+                            while(flag)
+                            {
+                                while( SDL_PollEvent( &e ) != 0 )
+                                {
+                                    if( e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP )
+                                    {
+                                        if( !game.insideBackButton() )
+                                        {
+                                            //continue;
+                                        }
+                                        //Mouse is inside button
+                                        else
+                                        {
+                                            switch (e.type)
+                                            {
+                                                case SDL_MOUSEMOTION:
+                                                    break;
+                                                case SDL_MOUSEBUTTONDOWN:
+                                                    Mix_PlayChannel(-1,game.merger,0);
+                                                    game.menu();
+                                                    flag=false;
+                                                    break;
+                                                case SDL_MOUSEBUTTONUP:
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            continue;
+                        }
+                        case SDL_MOUSEBUTTONUP:
+                            break;
+                    }
+                }
+
+                if(!game.insideExitButton())
+                {
+
+                }
+                else
+                {
+                    switch (e.type)
+                    {
+                        case SDL_MOUSEMOTION:
+                            break;
+                        case SDL_MOUSEBUTTONDOWN:
+                            Mix_PlayChannel(-1,game.merger,0);
+                            gamerun=false;
+                            break;
+                        case SDL_MOUSEBUTTONUP:
+                            break;
+                    }
+                }
+
             }
         }
     }

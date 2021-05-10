@@ -35,6 +35,8 @@ void Game::init() {
     StartButton = loadTexture(startPath, renderer);
     HelpButton = loadTexture(helpPath, renderer);
     ExitButton = loadTexture(exitPath ,renderer);
+    huongdanTxt = loadTexture(huongdanPath, renderer);
+    backTxt = loadTexture(backPath, renderer);
 
     for (int i=1;i<=2;i++)
     {
@@ -108,6 +110,8 @@ void Game::destroy()
     SDL_DestroyTexture( StartButton );
     SDL_DestroyTexture( HelpButton );
     SDL_DestroyTexture( ExitButton );
+    SDL_DestroyTexture( huongdanTxt) ;
+    SDL_DestroyTexture( backTxt) ;
 
     Mix_FreeChunk(win);
     Mix_FreeChunk(lose);
@@ -174,5 +178,118 @@ void Game::menu()
     SDL_RenderCopy( renderer, HelpButton, NULL, &rectHelp);
     SDL_RenderCopy( renderer, ExitButton, NULL, &rectExit);
     SDL_RenderPresent( renderer );
+}
+
+bool Game::insideStartButton()
+{
+    int x, y;
+    SDL_GetMouseState( &x, &y );
+
+    //Check if mouse is in button
+    bool inside = true;
+
+    //Mouse is left of the button
+    if( x < 400 )
+    {
+        inside = false;
+    }
+    //Mouse is right of the button
+    else if( x > 600 )
+    {
+        inside = false;
+    }
+    //Mouse above the button
+    else if( y < 250 )
+    {
+        inside = false;
+    }
+    //Mouse below the button
+    else if( y > 290 )
+    {
+        inside = false;
+    }
+    return inside;
+}
+
+bool Game::insideHelpButton()
+{
+    int x, y;
+    SDL_GetMouseState( &x, &y );
+
+    //Check if mouse is in button
+    bool inside = true;
+
+    //Mouse is left of the button
+    if( x < 400 )
+    {
+        inside = false;
+    }
+    //Mouse is right of the button
+    else if( x > 600 )
+    {
+        inside = false;
+    }
+    //Mouse above the button
+    else if( y < 300 )
+    {
+        inside = false;
+    }
+    //Mouse below the button
+    else if( y > 350 )
+    {
+        inside = false;
+    }
+    return inside;
+}
+
+bool Game::insideBackButton()
+{
+    int x, y;
+    SDL_GetMouseState( &x, &y );
+
+    //Check if mouse is in button
+    bool inside = true;
+
+    if( x > 100 )
+    {
+        inside = false;
+    }
+    //Mouse below the button
+    else if( y > 50 )
+    {
+        inside = false;
+    }
+    return inside;
+}
+
+bool Game::insideExitButton()
+{
+    int x, y;
+    SDL_GetMouseState( &x, &y );
+
+    //Check if mouse is in button
+    bool inside = true;
+
+    //Mouse is left of the button
+    if( x < 400 )
+    {
+        inside = false;
+    }
+    //Mouse is right of the button
+    else if( x > 600 )
+    {
+        inside = false;
+    }
+    //Mouse above the button
+    else if( y < 360 )
+    {
+        inside = false;
+    }
+    //Mouse below the button
+    else if( y > 410 )
+    {
+        inside = false;
+    }
+    return inside;
 }
 

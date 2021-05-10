@@ -32,6 +32,8 @@ public:
     const char* startPath = "start.png";
     const char* helpPath = "help.png";
     const char* exitPath = "exit.png";
+    const char* huongdanPath = "huongdan.png";
+    const char* backPath = "back.png" ;
 
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -57,6 +59,8 @@ public:
     SDL_Texture* StartButton;
     SDL_Texture* HelpButton;
     SDL_Texture* ExitButton;
+    SDL_Texture* huongdanTxt;
+    SDL_Texture* backTxt;
 
     Board x;
 
@@ -65,6 +69,7 @@ public:
     SDL_Rect rectStart;
     SDL_Rect rectHelp;
     SDL_Rect rectExit;
+    SDL_Rect rectBack;
 
     Game(int _w1,int _x,int _y,int _w2 )
     {
@@ -89,6 +94,11 @@ public:
         rectExit.y=360;
         rectExit.w=200;
         rectExit.h=50;
+
+        rectBack.x=0;
+        rectBack.y=0;
+        rectBack.w=100;
+        rectBack.h=50;
     };
 
     void init();
@@ -106,6 +116,14 @@ public:
     void printdata();
 
     void menu();
+
+    bool insideStartButton();
+
+    bool insideHelpButton();
+
+    bool insideExitButton();
+
+    bool insideBackButton();
 
 };
 #endif
