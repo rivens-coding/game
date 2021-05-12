@@ -15,7 +15,7 @@ public:
     const int SCREEN_HEIGHT = 650;
     const char* WINDOW_TITLE = "2048";
 
-    const char* backgroundImagePath = "bikiniBottom.jpg";
+    const char* backgroundImagePath = "background.png";
     const char* boardImagePath = "board.jpg";
     const char* imagePath_2 = "2.png";
     const char* imagePath_4 = "4.png";
@@ -28,12 +28,14 @@ public:
     const char* imagePath_512 = "512.png";
     const char* imagePath_1024 = "1024.png";
     const char* imagePath_2048 = "2048.png";
-    const char* gameOverImagePath = "balloons.png";
     const char* startPath = "start.png";
     const char* helpPath = "help.png";
     const char* exitPath = "exit.png";
     const char* huongdanPath = "huongdan.png";
     const char* backPath = "back.png" ;
+    const char* winPath = "win.png";
+    const char* losePath = "lose.png";
+    const char* newgamePath = "Newgame.png";
 
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -61,6 +63,9 @@ public:
     SDL_Texture* ExitButton;
     SDL_Texture* huongdanTxt;
     SDL_Texture* backTxt;
+    SDL_Texture* winTxt;
+    SDL_Texture* loseTxt;
+    SDL_Texture* newgameTxt;
 
     Board x;
 
@@ -70,6 +75,7 @@ public:
     SDL_Rect rectHelp;
     SDL_Rect rectExit;
     SDL_Rect rectBack;
+    SDL_Rect rectLose;
 
     Game(int _w1,int _x,int _y,int _w2 )
     {
@@ -99,6 +105,11 @@ public:
         rectBack.y=0;
         rectBack.w=100;
         rectBack.h=50;
+
+        rectLose.x=0;
+        rectLose.y=100;
+        rectLose.w=1000;
+        rectLose.h=200;
     };
 
     void init();
@@ -110,6 +121,8 @@ public:
     void render();
 
     void renderGameOver();
+
+    void renderWIN();
 
     void destroy();
 
@@ -124,6 +137,12 @@ public:
     bool insideExitButton();
 
     bool insideBackButton();
+
+    bool checkLose();
+
+    bool checkWin();
+
+    void Start(SDL_Event e, bool& gamerun, bool& start);
 
 };
 #endif

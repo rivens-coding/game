@@ -2,11 +2,6 @@
 #include "Board.h"
 #include<iostream>
 
-
-
-
-
-
 void Game::init() {
     initSDL(window, renderer, WINDOW_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
@@ -31,12 +26,14 @@ void Game::init() {
     image_512 = loadTexture(imagePath_512, renderer);
     image_1024 = loadTexture(imagePath_1024, renderer);
     image_2048 = loadTexture(imagePath_2048, renderer);
-    gameOverTxt = loadTexture(gameOverImagePath, renderer);
     StartButton = loadTexture(startPath, renderer);
     HelpButton = loadTexture(helpPath, renderer);
     ExitButton = loadTexture(exitPath ,renderer);
     huongdanTxt = loadTexture(huongdanPath, renderer);
     backTxt = loadTexture(backPath, renderer);
+    winTxt = loadTexture(winPath, renderer);
+    loseTxt = loadTexture(losePath, renderer);
+    newgameTxt = loadTexture(newgamePath, renderer);
 
     for (int i=1;i<=2;i++)
     {
@@ -87,7 +84,19 @@ void Game::renderGameOver()
 {
     clearScreen();
     SDL_RenderCopy( renderer, backgroundTxt, NULL, NULL);
-    SDL_RenderCopy( renderer, gameOverTxt, NULL, NULL);
+    SDL_RenderCopy( renderer, loseTxt, NULL, &rectLose);
+    SDL_RenderCopy( renderer, newgameTxt, NULL, &rectHelp);
+    SDL_RenderCopy( renderer, ExitButton, NULL, &rectExit);
+    SDL_RenderPresent( renderer );
+}
+
+void Game::renderWIN()
+{
+    clearScreen();
+    SDL_RenderCopy( renderer, backgroundTxt, NULL, NULL);
+    SDL_RenderCopy( renderer, winTxt, NULL, &rectLose);
+    SDL_RenderCopy( renderer, newgameTxt, NULL, &rectHelp);
+    SDL_RenderCopy( renderer, ExitButton, NULL, &rectExit);
     SDL_RenderPresent( renderer );
 }
 
@@ -106,12 +115,14 @@ void Game::destroy()
     SDL_DestroyTexture( image_512 );
     SDL_DestroyTexture( image_1024 );
     SDL_DestroyTexture( image_2048 );
-    SDL_DestroyTexture( gameOverTxt );
     SDL_DestroyTexture( StartButton );
     SDL_DestroyTexture( HelpButton );
     SDL_DestroyTexture( ExitButton );
     SDL_DestroyTexture( huongdanTxt) ;
     SDL_DestroyTexture( backTxt) ;
+    SDL_DestroyTexture (winTxt) ;
+    SDL_DestroyTexture (loseTxt) ;
+    SDL_DestroyTexture (newgameTxt);
 
     Mix_FreeChunk(win);
     Mix_FreeChunk(lose);
@@ -291,5 +302,193 @@ bool Game::insideExitButton()
         inside = false;
     }
     return inside;
+}
+
+bool Game::checkLose()
+{
+    if( !x.checkUp() && !x.checkDown() && !x.checkRight() && !x.checkLeft()) return true;
+    return false;
+}
+
+bool Game::checkWin()
+{
+    for(int i = 0; i < 4; i++)
+    {
+        for(int j = 0; j < 4; j++ )
+        {
+            if (x.board[i][j] == 2048) return true;
+        }
+    }
+    return false;
+}
+
+void Game::Start(SDL_Event e, bool& gamerun, bool& start)
+{
+    while(start)
+    {
+        if(SDL_WaitEvent(&e) == 0) continue;
+        if( e.type == SDL_QUIT )
+        {
+            start = false;
+            gamerun = false;
+        }
+        if ( e.type == SDL_MOUSEMOTION ) continue;
+        if (e.type == SDL_KEYDOWN)
+        {
+            switch (e.key.keysym.sym)
+                {
+                case SDLK_ESCAPE: gamerun=false;start=false;break;
+                case SDLK_LEFT:
+                    if(x.checkLeft())
+                    {
+                        x.Left();
+                        Mix_PlayChannel(-1,merger,0);
+                        x.init();
+                    }
+                    break;
+                case SDLK_RIGHT:
+                    if(x.checkRight())
+                    {
+                        x.Right();
+                        Mix_PlayChannel(-1,merger,0);
+                        x.init();
+                    }
+                    break;
+                case SDLK_DOWN:
+                    if(x.checkDown())
+                    {
+                        x.Down();
+                        Mix_PlayChannel(-1,merger,0);
+                        x.init();
+                    }
+                    break;
+                case SDLK_UP:
+                    if(x.checkUp())
+                    {
+                        x.Up();
+                        Mix_PlayChannel(-1,merger,0);
+                        x.init();
+                    }
+                    break;
+                }
+        }
+        render();
+        if(checkLose())
+        {
+            gamerun=false;
+            start=false;
+            Mix_PlayChannel(-1,lose,0);
+            renderGameOver();
+            bool flag=true;
+            while(flag)
+            {
+                while( SDL_PollEvent( &e ) != 0 )
+                {
+                    if( e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP )
+                    {
+                        if( !insideHelpButton() ) {}
+                        else
+                        {
+                            switch (e.type)
+                            {
+                                case SDL_MOUSEMOTION:
+                                    break;
+                                case SDL_MOUSEBUTTONDOWN:
+                                    Mix_PlayChannel(-1,merger,0);
+                                    for(int i=0;i<4;i++)
+                                    {
+                                        for(int j=0;j<4;j++)
+                                            x.board[i][j] =0;
+                                    }
+                                    for(int i=0;i<2;i++)
+                                    {
+                                        x.init();
+                                    }
+                                    start=true;
+                                    gamerun=true;
+                                    flag=false;
+                                    Start(e,gamerun,start);
+                                    break;
+                                case SDL_MOUSEBUTTONUP:
+                                    break;
+                            }
+                        }
+                        if(!insideExitButton()) {}
+                        else
+                        {
+                            switch(e.type)
+                            {
+                                case SDL_MOUSEMOTION:
+                                    break;
+                                case SDL_MOUSEBUTTONDOWN:
+                                    flag = false;
+                                    break;
+                                case SDL_MOUSEBUTTONUP:
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(checkWin())
+        {
+            gamerun=false;
+            start=false;
+            Mix_PlayChannel(-1,win,0);
+            renderWIN();
+            bool flag=true;
+            while(flag)
+            {
+                while( SDL_PollEvent( &e ) != 0 )
+                {
+                    if( e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP )
+                    {
+                        if( !insideHelpButton() ) {}
+                        else
+                        {
+                            switch (e.type)
+                            {
+                                case SDL_MOUSEMOTION:
+                                    break;
+                                case SDL_MOUSEBUTTONDOWN:
+                                    Mix_PlayChannel(-1,merger,0);
+                                    for(int i=0;i<4;i++)
+                                    {
+                                        for(int j=0;j<4;j++)
+                                            x.board[i][j] =0;
+                                    }
+                                    for(int i=0;i<2;i++)
+                                    {
+                                        x.init();
+                                    }
+                                    start=true;
+                                    gamerun=true;
+                                    flag=false;
+                                    Start(e,gamerun,start);
+                                    break;
+                                case SDL_MOUSEBUTTONUP:
+                                    break;
+                            }
+                        }
+                        if(!insideExitButton()) {}
+                        else
+                        {
+                            switch(e.type)
+                            {
+                                case SDL_MOUSEMOTION:
+                                    break;
+                                case SDL_MOUSEBUTTONDOWN:
+                                    flag = false;
+                                    break;
+                                case SDL_MOUSEBUTTONUP:
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
