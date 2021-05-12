@@ -23,7 +23,7 @@ bool Board::checkUp()
 {
     for(int i = 0; i < 4; i++)
     {
-        if (board[0][i] == 0 && board[1][i] == 0 && board[2][i] == 0 && board[3][i] == 0) continue;
+        //if (board[0][i] == 0 && board[1][i] == 0 && board[2][i] == 0 && board[3][i] == 0) continue;
         for(int j = 3; j > 0 ; j--)
         {
             for(int z = j-1; z >= 0; z--)
@@ -41,7 +41,7 @@ bool Board::checkDown()
 {
     for(int i = 0; i < 4; i++)
     {
-        if (board[0][i] == 0 && board[1][i] == 0 && board[2][i] == 0 && board[3][i] == 0) continue;
+        //if (board[0][i] == 0 && board[1][i] == 0 && board[2][i] == 0 && board[3][i] == 0) continue;
         for(int j = 0; j < 3 ; j++)
         {
             for(int z = j+1; z < 4; z++)
@@ -59,7 +59,7 @@ bool Board::checkRight()
 {
     for(int i = 0; i < 4; i++)
     {
-        if (board[i][0] == 0 && board[i][1] == 0 && board[i][2] == 0 && board[i][3] == 0) continue;
+        //if (board[i][0] == 0 && board[i][1] == 0 && board[i][2] == 0 && board[i][3] == 0) continue;
         for(int j = 0; j < 3; j++)
         {
             for(int z = j+1; z < 4; z++)
@@ -77,7 +77,7 @@ bool Board::checkLeft()
 {
     for(int i = 0; i < 4; i++)
     {
-        if (board[i][0] == 0 && board[i][1] == 0 && board[i][2] == 0 && board[i][3] == 0) continue;
+        //if (board[i][0] == 0 && board[i][1] == 0 && board[i][2] == 0 && board[i][3] == 0) continue;
         for(int j = 3; j > 0 ; j--)
         {
             for(int z = j-1; z >= 0; z--)

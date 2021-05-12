@@ -136,19 +136,6 @@ void Game::destroy()
     quitSDL(window, renderer);
 }
 
-void Game::printdata()
-{
-    for (int i=0;i<4;i++)
-    {
-        for (int j=0;j<4;j++)
-        {
-            cout << x.board[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
 bool Game::initmusic()
 {
     bool success = true;

@@ -126,8 +126,6 @@ public:
 
     void destroy();
 
-    void printdata();
-
     void menu();
 
     bool insideStartButton();
